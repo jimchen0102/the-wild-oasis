@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { HiSquare2Stack, HiPencil, HiTrash } from "react-icons/hi2";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
+import { useCreateCabin } from "./useCreateCabin";
 
 const TableRow = styled.div`
   display: grid;
@@ -45,6 +47,8 @@ const Discount = styled.div`
 
 function CabinRow({ cabin }) {
   const [showForm, setShowForm] = useState(false);
+  const { deleteCabinMutate, isDeleting } = useDeleteCabin();
+  const { createCabinMutate, isCreating } = useCreateCabin();
 
   const {
     id: cabinId,
@@ -52,10 +56,20 @@ function CabinRow({ cabin }) {
     maxCapacity,
     regularPrice,
     discount,
+    description,
     image,
   } = cabin;
 
-  const { deleteCabinMutate, isDeleting } = useDeleteCabin();
+  function handleDuplicate() {
+    createCabinMutate({
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      discount,
+      description,
+      image,
+    });
+  }
 
   return (
     <>
@@ -70,12 +84,17 @@ function CabinRow({ cabin }) {
           <span>&mdash;</span>
         )}
         <div>
-          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button disabled={isCreating} onClick={handleDuplicate}>
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm((show) => !show)}>
+            <HiPencil />
+          </button>
           <button
-            onClick={() => deleteCabinMutate(cabinId)}
             disabled={isDeleting}
+            onClick={() => deleteCabinMutate(cabinId)}
           >
-            Delete
+            <HiTrash />
           </button>
         </div>
       </TableRow>
