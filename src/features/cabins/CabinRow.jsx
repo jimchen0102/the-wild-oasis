@@ -59,7 +59,6 @@ function CabinRow({ cabin }) {
     mutationFn: deleteCabin,
     onSuccess: () => {
       toast.success("Cabin successfully deleted");
-
       queryClient.invalidateQueries({
         queryKey: ["cabins"],
       });
