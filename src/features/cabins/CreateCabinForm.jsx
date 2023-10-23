@@ -10,7 +10,7 @@ import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
 
-function CreateCabinForm({ cabinToUpdate = {} }) {
+function CreateCabinForm({ cabinToUpdate = {}, onCloseModal }) {
   const { createCabinMutate, isCreating } = useCreateCabin();
   const { updateCabinMutate, isUpdating } = useUpdateCabin();
   const isWorking = isCreating || isUpdating;
@@ -36,7 +36,10 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
           id: updateId,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
     else
@@ -46,13 +49,19 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
           image,
         },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
         }
       );
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
       <FormRow label="Cabin name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -133,7 +142,11 @@ function CreateCabinForm({ cabinToUpdate = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button $variation="secondary" type="reset">
+        <Button
+          $variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>
