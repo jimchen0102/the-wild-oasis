@@ -1,5 +1,4 @@
-import { useState, useContext, createContext, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState, useContext, createContext } from "react";
 import { HiEllipsisVertical } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
@@ -32,6 +31,7 @@ const StyledToggle = styled.button`
 const StyledList = styled.ul`
   position: absolute;
 
+  width: 160px;
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
