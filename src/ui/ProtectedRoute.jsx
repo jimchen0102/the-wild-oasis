@@ -24,7 +24,7 @@ function ProtectedRoute({ children }) {
     );
 
   // 3. If there is NO authenticated user, redirect to /login
-  if (!isAuthenticated) <Navigate to="/login" />;
+  if (!isAuthenticated) return <Navigate to="/login" />;
 
   // 4. If there is a user, render the app
   return children;
